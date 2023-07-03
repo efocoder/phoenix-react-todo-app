@@ -1,14 +1,32 @@
 defmodule TodoApiWeb.Router do
   use TodoApiWeb, :router
+  use Plug.ErrorHandler
+
+   defp handle_errors(conn, %{reason: %Phoenix.Router.NoRouteError{message: message}}) do
+     conn
+     |> json(%{errors: message})
+     |> halt()
+   end
+
+   defp handle_errors(conn, %{reason: %{message: message}}) do
+     conn
+     |> json(%{errors: message})
+     |> halt()
+   end
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug TodoApiWeb.Auth.Pipeline
+  end
+
   scope "/api", TodoApiWeb do
     pipe_through :api
     scope "v1", V1, as: "v1" do
-      resources "/accounts", AccountController, except: [:new, :edit, :index]
+      resources "/accounts", AccountController, only: [:create, :show, :update]
+      post "/accounts/sign_in", AccountController, :sign_in
     end
   end
 

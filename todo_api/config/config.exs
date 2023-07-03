@@ -11,6 +11,10 @@ config :todo_api,
   ecto_repos: [TodoApi.Repo],
   generators: [binary_id: true]
 
+config :todo_api, TodoApiWeb.Auth.Guardian,
+       issuer: "todo_api",
+       secret_key: "cz8yR0bdxJDorpPn5HaSvTGDSUVTynDB2Q1Qk0hCyeI/D87mPnHzE4OEhmrcatPF"
+
 # Configures the endpoint
 config :todo_api, TodoApiWeb.Endpoint,
   url: [host: "localhost"],

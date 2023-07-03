@@ -7,6 +7,7 @@ defmodule TodoApi.Accounts do
   alias TodoApi.Repo
 
   alias TodoApi.Accounts.Account
+  alias TodoApiWeb.Auth.Guardian
 
   @doc """
   Returns the list of accounts.
@@ -36,6 +37,28 @@ defmodule TodoApi.Accounts do
 
   """
   def get_account!(id), do: Repo.get!(Account, id)
+
+  @doc """
+    Gets a single account by email address
+
+    Returns nil if the Account does not exist
+
+    ## Examples
+      iex> get_account_by_email(email@test.com)
+      %Account{}
+
+      iex> get_account_by_email(no-email@test.com)
+      nil
+  """
+  def get_account_by_email(email), do: Repo.get_by(Account, email: email)
+
+  @doc """
+      authenticates a user by email address and password
+
+      Returns false if credentials are invalid
+  """
+  def sign_in(email, password), do: Guardian.authenticate(email, password)
+
 
   @doc """
   Creates a account.

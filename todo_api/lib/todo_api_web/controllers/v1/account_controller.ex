@@ -3,8 +3,22 @@ defmodule TodoApiWeb.V1.AccountController do
 
   alias TodoApi.Accounts
   alias TodoApi.Accounts.Account
+  alias TodoApiWeb.Auth.ErrorResponse
 
   action_fallback TodoApiWeb.FallbackController
+
+
+  def sign_in(conn, %{"email" => email, "password" => password }) do
+    case Accounts.sign_in(email, password) do
+      {:ok, account, token} ->
+        conn
+        |> put_status(:ok)
+        |> render(:access_token, %{account: account, token: token})
+
+      {:error, :unauthorized} ->
+        raise ErrorResponse.Unauthorized, message: "Invalid credentials"
+    end
+  end
 
   def create(conn, %{"account" => account_params}) do
     with {:ok, %Account{} = account} <- Accounts.create_account(account_params) do
