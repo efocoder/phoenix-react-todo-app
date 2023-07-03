@@ -50,14 +50,24 @@ defmodule TodoApi.Accounts do
       iex> get_account_by_email(no-email@test.com)
       nil
   """
-  def get_account_by_email(email), do: Repo.get_by(Account, email: email)
+  def get_account_by_email(email, ip) do
+    case Repo.get_by(Account, email: email) do
+      nil -> nil
+      account ->
+
+        Account.changeset(account, %{last_login: NaiveDateTime.utc_now(), last_login_ip: ip})
+        |> Repo.update!()
+
+        account
+    end
+  end
 
   @doc """
       authenticates a user by email address and password
 
       Returns false if credentials are invalid
   """
-  def sign_in(email, password), do: Guardian.authenticate(email, password)
+  def sign_in(email, password, ip), do: Guardian.authenticate(email, password, ip)
 
 
   @doc """

@@ -45,7 +45,8 @@ defmodule TodoApi.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:guardian, "~> 2.3"},
       {:bcrypt_elixir, "~> 3.0"},
-      {:flop_phoenix, "~> 0.19.0"}
+      {:flop_phoenix, "~> 0.19.0"},
+      {:ecto_network, "~> 1.3.0"},
     ]
   end
 

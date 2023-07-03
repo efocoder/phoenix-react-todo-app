@@ -30,6 +30,13 @@ defmodule TodoApiWeb.Router do
     end
   end
 
+  scope "/api", TodoApiWeb do
+    pipe_through [:api, :auth]
+    scope "v1", V1, as: "v1" do
+      resources "/todos", TodoController, except: [:new, :edit]
+    end
+  end
+
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:todo_api, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put

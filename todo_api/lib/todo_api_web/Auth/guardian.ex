@@ -26,11 +26,10 @@ defmodule TodoApiWeb.Auth.Guardian do
     {:error, :no_id_provided}
   end
 
-  def authenticate(email, password) do
-    case Accounts.get_account_by_email(email) do
+  def authenticate(email, password, ip) do
+    case Accounts.get_account_by_email(email, ip) do
       nil ->
         {:error, :unauthorized}
-
       account ->
         case validate_password(password, account.password) do
           true -> create_token(account)

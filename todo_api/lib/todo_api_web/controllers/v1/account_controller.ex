@@ -9,7 +9,7 @@ defmodule TodoApiWeb.V1.AccountController do
 
 
   def sign_in(conn, %{"email" => email, "password" => password }) do
-    case Accounts.sign_in(email, password) do
+    case Accounts.sign_in(email, password, conn.remote_ip) do
       {:ok, account, token} ->
         conn
         |> put_status(:ok)
